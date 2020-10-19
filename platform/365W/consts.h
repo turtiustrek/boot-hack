@@ -1,0 +1,5 @@
+
+#define CURRENT_BUTTON_REG 0x40a57c6c
+#define ERROR_BUTTON_VAL 0x6
+#define WPS_BUTTON_VAL 0x14 
+#define POWER_BUTTON_VAL 0x2
