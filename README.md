@@ -24,4 +24,4 @@ go 4000DEE0
 Currently this is not persistent and it will not run again after a reboot(currently working on a signed version). 
 This should not be run on anything else unless the firmware version is V3.00.01.14F.
 
-![](docs/further-analysis-of-a-samsung-c410w-365w-laser-printer/images/IMG_3830-1024x683.jpg)
+![](image.jpg)
