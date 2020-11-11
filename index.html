@@ -297,15 +297,16 @@ be able to execute the following command after connecting the&nbsp;<em>EEPROM</e
 
 
 
-<pre class="wp-block-code"><code>$ git clone https://github.com/tat/eeprog</code></pre>
+<pre class="wp-block-code"><code>$ wget https://github.com/jsarenik/eeprog/archive/master.zip</code></pre>
 
 
 
+<pre class="wp-block-code"><code>$ unzip master.zip</code></pre>
+
+
+
+<pre class="wp-block-code"><code>$ mv eeprog-master eeprog</code></pre>
 <pre class="wp-block-code"><code>$ cd eeprog</code></pre>
-
-
-
-<pre class="wp-block-code"><code>$ make</code></pre>
 
 
 
@@ -313,7 +314,7 @@ be able to execute the following command after connecting the&nbsp;<em>EEPROM</e
 
 
 
-<pre class="wp-block-code"><code>$ cat ./24c256.bin | ./eeprog /dev/i2c-0 0x55 -w 0x0</code></pre>
+<pre class="wp-block-code"><code>$  ./eeprog -f -16 -i 24c256.bin -w 0x00 -t 5 /dev/i2c-0 0x55</code></pre>
 
 
 
