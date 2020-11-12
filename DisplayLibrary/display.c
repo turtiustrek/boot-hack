@@ -9,7 +9,7 @@ Written for the printer only.
 #include "../functions.h"
 #include "font.h"
 static char buffer[1024] = {0};
-
+static char cmdbuf[2] = {0,0};
 // Custom Functions
 void disp_queue(int value, int cd)
 {
@@ -19,7 +19,7 @@ void disp_queue(int value, int cd)
   }
   MEM(0x40add0b4) = 0x01000000; //has to be one so the writeI2C function can well function as its a cmp in one the functions in apply
   //horrible implentation but this would work
-  static char *cmdbuf;
+  
   if (cd == 0)
   {
     cmdbuf[0] = 0x0;
@@ -31,7 +31,7 @@ void disp_queue(int value, int cd)
     cmdbuf[1] = value;
   }
 
-  writeI2C(0x78, 0x2, &cmdbuf);
+  writeI2C(0x78, 0x2, cmdbuf);
   if (OSAL_ReleaseSemaphore(MEM(0x40b2a448), "HAL_I2C.c", 0x154) != 0)
   {
     assert("Failed to release I2C semaphore..\n");
