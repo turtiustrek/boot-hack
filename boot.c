@@ -9,10 +9,7 @@
 
 static int task()
 {
-
   disp_init();
-  check_checksum();
-
   printf("\n End I2C Display Init\n");
   disp_clear();
   disp_print("Display Init.. Done!", 0, 0);
@@ -24,37 +21,22 @@ static int task()
   disp_update();
   while (1)
   {
-
-    if (MEM(CURRENT_BUTTON_REG) != 0x17)
-    {
-
-      break;
-    }
-  }
-
-  while (1)
-  {
-    if (MEM(CURRENT_BUTTON_REG) == ERROR_BUTTON_VAL)
-    {
+   switch MEM(CURRENT_BUTTON_REG){
+   case ERROR_BUTTON_VAL:
       disp_clear();
       disp_print("ERROR BTN", 0, 0);
       disp_update();
-    }
-    else if (MEM(CURRENT_BUTTON_REG) == WPS_BUTTON_VAL)
-    {
+   case WPS_BUTTON_VAL:
       disp_clear();
       disp_print("WPS BTN", 0, 0);
       disp_update();
-    }else if (MEM(CURRENT_BUTTON_REG) == POWER_BUTTON_VAL)
-    {
+   case POWER_BUTTON_VAL:
       disp_clear();
       disp_print("PWR BTN", 0, 0);
       disp_update();
-    }
-
     //printf("Button1: %x  Button2: %x Button3: %x Button4: %x\n",MEM(0x40a57d10),MEM(0x40a57d14),MEM(0x40a57c74),MEM(0x40a57c6c));
-
-    OSAL_YieldTask(5);
+  }
+   OSAL_YieldTask(5);
   }
 }
 static int kernelmain()
@@ -74,7 +56,6 @@ static int kernelmain()
   OSAL_CreateTask("CustomCode", task, 0, 0x2000, 0x40);
   return 1;
 }
-
 void main()
 {
 
