@@ -1,6 +1,6 @@
 #include "stub.h"
 .text
-ARM32_FN(0x40014174,printf)
+ARM32_FN(0x40014174,uart_printf)
 //kernel 
 ARM32_FN(0x40022698,loadkernel) //bootloader
 ARM32_FN(0x40014300,runkernel) //bootloader

@@ -2,7 +2,7 @@
 
 #define MEM(x) (*(int *)(x))
 
-extern void printf(const char *, ...);
+extern void uart_printf(const char *, ...);
 
 extern void TaskEntry();
 extern void loadkernel();
@@ -17,7 +17,7 @@ extern void OSAL_YieldTask(int delay); //100 ~ 1 second
 
 extern void VCCOnPower();
 extern void VCCOffPower();
-extern void writeI2C(int addr, int length, int array);
+extern void writeI2C(int addr, int length, char** array);
 extern void applyI2C();
 
 extern int check_checksum();

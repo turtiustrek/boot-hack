@@ -19,7 +19,7 @@ void disp_queue(int value, int cd)
   }
   MEM(0x40add0b4) = 0x01000000; //has to be one so the writeI2C function can well function as its a cmp in one the functions in apply
   //horrible implentation but this would work
-  static char cmdbuf[2];
+  static char *cmdbuf;
   if (cd == 0)
   {
     cmdbuf[0] = 0x0;
@@ -88,11 +88,11 @@ void disp_drawchar(char letter, int xpos, int ypos)
         bits so that one bit can be 'read' at a time. 
         */
         set = Ubuntu_Mono5x8[(letter * font_width) + y - (32 * font_width)] & (1 << x);
-        //printf("%c", set ? 'X' : ' ');
+        //uart_printf("%c", set ? 'X' : ' ');
         disp_putpixel(y + xpos, x + ypos + cursor, set ? 0x1 : 0);
       }
     }
-    // printf("\n");
+    // uart_printf("\n");
   }
 }
 
@@ -117,7 +117,7 @@ void disp_init()
 {
   VCCOnPower();
   OSAL_YieldTask(1000);
-  printf("\n Start I2C Display Init\n");
+  uart_printf("\n Start I2C Display Init\n");
   //From adafruit library
   // memset(buffer,0,1024); //set buffer to 0
   disp_queue(0xAE, 0); //--turn off oled panel

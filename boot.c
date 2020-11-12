@@ -10,7 +10,7 @@
 static int task()
 {
   disp_init();
-  printf("\n End I2C Display Init\n");
+  uart_printf("\n End I2C Display Init\n");
   disp_clear();
   disp_print("Display Init.. Done!", 0, 0);
   disp_print("Custom Code Ver: 0.01", 0, 8);
@@ -21,28 +21,34 @@ static int task()
   disp_update();
   while (1)
   {
-   switch MEM(CURRENT_BUTTON_REG){
-   case ERROR_BUTTON_VAL:
-      disp_clear();
-      disp_print("ERROR BTN", 0, 0);
-      disp_update();
-   case WPS_BUTTON_VAL:
-      disp_clear();
-      disp_print("WPS BTN", 0, 0);
-      disp_update();
-   case POWER_BUTTON_VAL:
-      disp_clear();
-      disp_print("PWR BTN", 0, 0);
-      disp_update();
-    //printf("Button1: %x  Button2: %x Button3: %x Button4: %x\n",MEM(0x40a57d10),MEM(0x40a57d14),MEM(0x40a57c74),MEM(0x40a57c6c));
-  }
-   OSAL_YieldTask(5);
+    switch
+      MEM(CURRENT_BUTTON_REG)
+      {
+      case ERROR_BUTTON_VAL:
+        disp_clear();
+        disp_print("ERROR BTN", 0, 0);
+        disp_update();
+        break;
+      case WPS_BUTTON_VAL:
+        disp_clear();
+        disp_print("WPS BTN", 0, 0);
+        disp_update();
+        break;
+      case POWER_BUTTON_VAL:
+        disp_clear();
+        disp_print("PWR BTN", 0, 0);
+        disp_update();
+        break;
+        //uart_printf("Button1: %x  Button2: %x Button3: %x Button4: %x\n",MEM(0x40a57d10),MEM(0x40a57d14),MEM(0x40a57c74),MEM(0x40a57c6c));
+      }
+
+    OSAL_YieldTask(5);
   }
 }
 static int kernelmain()
 {
-  printf("\n branched sucessfully. \n");
-  printf("\n Executing Tasks\n");
+  uart_printf("\n branched sucessfully. \n");
+  uart_printf("\n Executing Tasks\n");
   //Return the actual flow.
 
   //replace the  string back
@@ -59,9 +65,9 @@ static int kernelmain()
 void main()
 {
 
-  printf("Custom code running. \n");
-  printf("kernelmain function at: %x\n", &kernelmain);
-  printf("Version 0.01 by turtiustrek\n");
+  uart_printf("Custom code running. \n");
+  uart_printf("kernelmain function at: %x\n", &kernelmain);
+  uart_printf("Version 0.01 by turtiustrek\n");
   //check_checksum(0x41200000,0x399876+ i);
 
   MEM(0x4002279c) = 0xe8bd8018; //ldmia sp!,{r3,r4,pc}
@@ -71,14 +77,14 @@ void main()
   //MEM(0x4076a95c) = 0xf0f00000;
   //pc offset calculation =  (dest - curr ins )-8
   //jump hook main loop
-  MEM(0x4077567c) = &kernelmain;
+  MEM(0x4077567c) = (int)&kernelmain;
   MEM(0x40775570) = 0xe5bff104; //ldr pc, [pc, #0x104]!
 
   MEM(0x404bb1c0) = 0xe8bd807e; //VCCOffPower return. aka make it say on
 
 #ifdef DEBUG
       //Debugging logs hook MAY CRASH LOL
-  MEM(0x405363dc) = &printf;
+  MEM(0x405363dc) = (int)&uart_printf;
   MEM(0x40536048) = 0xe5bff38c; //ldr pc, [pc, #0x38c]!
 
   //NOP spam logs (slows down boot by ALOT)
@@ -87,7 +93,7 @@ void main()
   int tonop[12] = {0x40539d04, 0x40539d7c, 0x40539da0, 0x40539d4c, 0x40539bf8, 0x40539c30, 0x40539c04, 0x4053a490, 0x4053a548, 0x4053a4d4, 0x4053a2f0, 0x4053a3c0};
   for (int i = 0; i < 12; i++)
   {
-    printf("To NOP: %x \n", tonop[i]);
+    uart_printf("To NOP: %x \n", tonop[i]);
     MEM(tonop[i]) = 0xe320f000; //nop
   }
 #endif
